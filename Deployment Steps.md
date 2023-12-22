@@ -1,4 +1,4 @@
-# Deploying a HuggingFace BERT Model on SageMaker #
+# Deploying Roberta Model on SageMaker #
 
 ## Overview ##
 
