@@ -6,7 +6,7 @@ from src.constants import PRODUCT_MAPPING, EMOTION_MAPPING
 def load_model():
     output_model_file = 'src/ml/models/pytorch_roberta_sentiment.bin'
     loaded_model = torch.load(output_model_file)
-    output_vocab_file = './'
+    output_vocab_file = 'src/ml/models/vocab/'
     # Extract the state dictionary from the loaded model
     state_dict = loaded_model.state_dict()
 
