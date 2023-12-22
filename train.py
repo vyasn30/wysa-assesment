@@ -5,12 +5,17 @@ from src.ml.data.SentimentData import SentimentData
 from src.ml.models.RobertaClass import RobertaClass
 import torch
 
-# Defining some key variables that will be used later on in the training
+
+"""
+Training Script for 
+"""
+
+
 MAX_LEN = 256
 TRAIN_BATCH_SIZE = 8
 VALID_BATCH_SIZE = 4
 
-# EPOCHS = 1
+EPOCHS = 10
 LEARNING_RATE = 1e-05
 tokenizer = RobertaTokenizer.from_pretrained('roberta-base', truncation=True, do_lower_case=True)
 
@@ -41,7 +46,7 @@ def train_model(epoch):
         loss_sentiment = loss_function(outputs_sentiment, targets_sentiment)
         loss_emotion = loss_function(outputs_emotion, targets_emotion)
 
-        # Combine the losses, for example, add them
+        # Combine the losses
         loss = loss_sentiment + loss_emotion
         loss.backward()
         optimizer.step()
@@ -81,8 +86,8 @@ def train_model(epoch):
 
 if __name__ == "__main__":
     df = pd.read_csv(".data/train.csv")
-    print(df.head())
 
+    print(df.head())
 
     train_params = {'batch_size': TRAIN_BATCH_SIZE,
                 'shuffle': True,
@@ -112,18 +117,19 @@ if __name__ == "__main__":
     print(training_loader)
 
     model = RobertaClass()
+    
+    # device = "cuda" if torch.cuda.is_available() else "cpu"
     device = "cpu"
     model.to(device)
 
     loss_function = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(params =  model.parameters(), lr=LEARNING_RATE)
 
-    EPOCHS = 1
     for epoch in range(EPOCHS):
         train_model(epoch) 
 
-    output_model_file = 'pytorch_roberta_sentiment.bin'
-    output_vocab_file = './'
+    output_model_file = 'src/ml/models/pytorch_roberta_sentiment.bin'
+    output_vocab_file = 'src/ml/models/vocab/'
 
     model_to_save = model
     torch.save(model_to_save, output_model_file)

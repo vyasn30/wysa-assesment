@@ -7,7 +7,7 @@ class SentimentData(Dataset):
         self.tokenizer = tokenizer
         self.text = dataframe.tweet_text
         self.max_len = max_len
-        self.sentiment_targets = self.data.sentiment
+        self.sentiment_targets = self.data.sentiment 
         self.product_targets = self.data.emotion_at
         self.max_len = max_len
 
@@ -18,6 +18,8 @@ class SentimentData(Dataset):
         text = str(self.text[index])
         text = " ".join(text.split())
 
+
+        # Use RobertaTokenizer to tokenize the tweet_text
         inputs = self.tokenizer.encode_plus(
             text,
             None,
@@ -26,6 +28,10 @@ class SentimentData(Dataset):
             pad_to_max_length=True,
             return_token_type_ids=True
         )
+
+        # Covert it to torch.tensors. Wasted 2 hours. The model unpacks these
+        # and it needs attributes for shapes and lens and simple numpy arrs 
+        # aren't compatible
         ids = torch.tensor(inputs['input_ids'], dtype=torch.long)
         mask = torch.tensor(inputs['attention_mask'], dtype=torch.long)
         token_type_ids = torch.tensor(inputs["token_type_ids"], dtype=torch.long)

@@ -45,18 +45,3 @@ class RedisRepository:
         deleted_count = self.redis_client.hdel('tweets', tweet_id)
         return deleted_count > 0
 
-if __name__ == "__main__":
-    repository = RedisRepository()
-
-    repository.insert_tweet('1', 'I love GPT-3!', 'positive', '2023-12-22 12:34:56')
-
-    retrieved_tweet = repository.get_tweet_by_id('1')
-    print(retrieved_tweet)
-
-    positive_tweets = repository.get_tweets_by_sentiment('positive')
-    print(positive_tweets)
-
-    repository.update_sentiment_by_id('1', 'neutral')
-
-    deleted = repository.delete_tweet_by_id('1')
-    print(f'Tweet deleted: {deleted}')
