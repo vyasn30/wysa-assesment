@@ -1,44 +1,7 @@
 from src.ml.models.RobertaClass import RobertaClass
 from transformers import RobertaTokenizer
 import torch
-import pandas as pd
-
-# PRODUCT_MAPPING = {
-#     'iPhone': 1,
-#     'iPad or iPhone App': 2,
-#     'iPad': 3,
-#     'Google': 4,
-#     'Android': 5,
-#     'Apple': 6,
-#     'Android App': 7,
-#     'Other Google product or service': 8,
-#     'Other Apple product or service': 9
-# }
-
-# EMOTION_MAPPING = {
-#     'Positive emotion': 1,
-#     'Negative emotion': 2, 
-#     'No emotion toward brand or product': 3
-# }
-
-PRODUCT_MAPPING = {
-    1: 'iPhone',
-    2: 'iPad or iPhone App',
-    3: 'iPad',
-    4: 'Google',
-    5: 'Android',
-    6: 'Apple',
-    7: 'Android App',
-    8: 'Other Google product or service',
-    9: 'Other Apple product or service'
-}
-
-EMOTION_MAPPING = {
-    1: 'Positive emotion',
-    2: 'Negative emotion',
-    3: 'No emotion toward brand or product'
-}
-
+from src.constants import PRODUCT_MAPPING, EMOTION_MAPPING
 
 def load_model():
     output_model_file = 'src/ml/models/pytorch_roberta_sentiment.bin'
@@ -75,7 +38,6 @@ def predict(model, tokenizer, tweet):
     ids = ids.unsqueeze(0)
     mask = mask.unsqueeze(0)
 
-    # Forward pass through the loaded model
     with torch.no_grad():
         outputs_sentiment, outputs_product = model(ids, mask, token_type_ids)
 
@@ -85,16 +47,9 @@ def predict(model, tokenizer, tweet):
 
     predicted_product = PRODUCT_MAPPING.get(predicted_product.item())
     predicted_sentiment = EMOTION_MAPPING.get(predicted_sentiment.item())
-    # Print the results
-    # print(f"Predicted Sentiment: {predicted_sentiment}")
-    # print(f"Predicted Product: {predicted_product}")
 
     return predicted_sentiment, predicted_product
 
 
-if __name__ == "__main__":
-    model, tokenizer = load_model()
-    df = pd.read_csv("ML Assignment Dataset - Test.csv")
-    df[['Emotion', 'Product']] = df['Tweet'].apply(lambda tweet: pd.Series(predict(model, tokenizer, tweet)))
 
-    df.to_csv("answer.csv")
+

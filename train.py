@@ -3,8 +3,6 @@ import pandas as pd
 from torch.utils.data import DataLoader
 from src.ml.data.SentimentData import SentimentData
 from src.ml.models.RobertaClass import RobertaClass
-from torch import cuda
-from tqdm import tqdm
 import torch
 
 # Defining some key variables that will be used later on in the training

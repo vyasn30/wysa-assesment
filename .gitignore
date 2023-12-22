@@ -1,3 +1,4 @@
-.env/
+venv/
 .data/
 src/ml/models/pytorch_roberta_sentiment.bin
+.env
